@@ -1,0 +1,17 @@
+Giải thích luồng dữ liệu :
+
+Input (Yêu cầu): Người dùng gửi một yêu cầu HTTP GET đến URL (ví dụ: /dishes).
+
+Controller Processing: * Controller tiếp nhận yêu cầu.
+
+Khởi tạo một List<Dish>.
+
+Sử dụng phương thức model.addAttribute("key", value) để đẩy danh sách vào đối tượng Model.
+
+Bridge (Cầu nối): Controller trả về tên View (String) là "dish-list". Spring MVC dựa vào ViewResolver để tìm file /WEB-INF/templates/dish-list.html.
+
+Output (Hiển thị): * Thymeleaf quét file HTML, tìm các thuộc tính như th:each.
+
+Dữ liệu từ Model được chèn vào các vị trí tương ứng.
+
+Kết quả cuối cùng là một trang HTML thuần được gửi về trình duyệt của người dùng

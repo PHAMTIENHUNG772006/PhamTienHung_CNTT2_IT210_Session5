@@ -1,0 +1,41 @@
+1. Phân tích 2 cách tiếp cận Layout
+Cách A: Copy-paste Header/Footer vào từng file (Thủ công)
+
+Ưu điểm: * Cực kỳ đơn giản, không cần cấu hình Java Bean hay học thêm cú pháp mới.
+
+Dễ dàng tùy biến riêng lẻ từng trang (ví dụ: trang này muốn Header khác một chút so với trang kia).
+
+Nhược điểm:
+
+Ác mộng bảo trì: Nếu bạn đổi tên trung tâm từ "Edu-Path" thành "Edu-Path Pro", bạn phải mở từng file HTML lên để sửa. Với dự án lớn 50-100 trang, đây là công việc cực kỳ dễ sai sót.
+
+Phình to mã nguồn: Các đoạn code giống hệt nhau bị lặp lại khắp nơi, vi phạm nguyên lý DRY (Don't Repeat Yourself) trong lập trình.
+
+Dễ lỗi cấu trúc: Chỉ cần quên đóng một thẻ </div> khi copy-paste, giao diện toàn bộ trang đó sẽ bị vỡ.
+
+Cách B: Sử dụng layout:decorate (Layout Dialect)
+
+Ưu điểm:
+
+Quản lý tập trung: Bạn chỉ có đúng một file "khung xương" (main-layout.html). Thay đổi ở đây sẽ cập nhật cho toàn hệ thống ngay lập tức.
+
+Code sạch sẽ: Trang con chỉ chứa nội dung thực sự của nó (như bảng danh sách, form nhập liệu), không bị lẫn tạp âm từ Header/Footer.
+
+Tính nhất quán: Đảm bảo mọi trang trong dự án Edu-Path đều có chung một bộ nhận diện thương hiệu, font chữ và khoảng cách.
+
+Nhược điểm:
+
+Phải cấu hình thư viện và đăng ký Bean trong Spring Boot.
+
+Người mới bắt đầu sẽ thấy hơi khó hiểu về cơ chế "nhúng" (fragment) và "kế thừa" (decorate).
+
+3. Phân tích kỹ thuật: Tại sao phải đăng ký LayoutDialect Bean?
+Trong Spring Boot hiện đại, nếu bạn thêm dependency thymeleaf-layout-dialect vào Maven/Gradle, Spring Boot thường tự động cấu hình (Auto-configuration). Tuy nhiên, trong các bài tập lớn hoặc môi trường yêu cầu can thiệp sâu vào cấu hình, chúng ta vẫn phải đăng ký Bean LayoutDialect vì các lý do sau:
+
+Mở rộng bộ cú pháp (Standard Dialect vs. Layout Dialect): Mặc định, Thymeleaf chỉ hiểu các thuộc tính bắt đầu bằng th: (Standard Dialect). Để nó hiểu được các thuộc tính như layout:decorate hay layout:fragment, chúng ta phải "dạy" cho Engine bằng cách nạp thêm thư viện Layout Dialect vào.
+
+Kết nối các thành phần (SpringTemplateEngine): SpringTemplateEngine là bộ não xử lý template. Nó không tự động quét các thư viện bên ngoài trừ khi được chỉ định. Việc đăng ký Bean giúp SpringTemplateEngine biết rằng nó cần sử dụng thêm một "bộ lọc" để xử lý các thẻ layout trước khi trả về HTML cuối cùng cho trình duyệt.
+
+Tùy biến hành động: Khi đăng ký qua Java Code, bạn có thể cấu hình các tùy chọn nâng cao như Sorting Strategy (cách ưu tiên chèn các đoạn mã CSS/JS từ trang con vào layout chính sao cho không bị xung đột).
+
+Nếu bạn không đăng ký Bean này, trình duyệt sẽ coi các thuộc tính layout:* là các thuộc tính HTML vô nghĩa và bỏ qua chúng, dẫn đến việc trang web của bạn chỉ hiện nội dung trang con mà mất sạch khung Header/Footer.

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title>Ưu đãi hôm nay</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h3 class="mb-4">Chương trình ưu đãi hôm nay</h3>
+
+    <div th:if="${#lists.isEmpty(dishes)}" class="alert alert-warning">
+        Hiện chưa có chương trình ưu đãi, quý khách vui lòng quay lại sau!
+    </div>
+
+    <div th:unless="${#lists.isEmpty(dishes)}" class="row">
+        <div class="col-md-4 mb-3" th:each="dish : ${dishes}">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span th:text="${dish.name}">Tên món</span>
+                        <span th:if="${dish.discountPercent > 20}" class="hot-deal small">HOT DEAL</span>
+                    </h5>
+
+                    <p class="card-text text-muted">
+                        Giá gốc: <del th:text="${#numbers.formatDecimal(dish.originalPrice, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></del>
+                    </p>
+
+                    <p class="card-text text-danger fw-bold">
+                        Giá KM:
+                        <span th:text="${#numbers.formatDecimal(dish.originalPrice * (100 - dish.discountPercent) / 100, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></span>
+                        (<span th:text="'-' + ${dish.discountPercent} + '%'"></span>)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

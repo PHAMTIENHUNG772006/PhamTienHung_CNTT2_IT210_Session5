@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div class="card mx-auto" style="max-width: 500px;">
+        <div class="card-body">
+            <h2 class="card-title text-primary" th:text="${dish.name}">Phở Bò Cung Đình</h2>
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item d-flex justify-content-between">
+                    Giá gốc: <span th:text="${dish.price}">50,000</span> VNĐ
+                </li>
+                <li class="list-group-item d-flex justify-content-between text-danger">
+                    Thuế VAT: <span th:text="${vat}">10%</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between fw-bold">
+                    TỔNG CỘNG: <span th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')}">55,000</span> VNĐ
+                </li>
+            </ul>
+
+            <button class="btn btn-success w-100">XÁC NHẬN ĐẶT MÓN</button>
+            <a th:href="@{/bai5/dish}" class="btn btn-link w-100 mt-2">Quay lại thực đơn</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

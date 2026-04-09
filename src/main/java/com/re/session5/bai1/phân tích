@@ -1,0 +1,4 @@
+trong bài 1 việc cấu hình bằng thymeleaf trong dự án thì phải quét thư mục ẩn "templates" để an toàn
+trong việc quét các trang giao diện
+
+quét hậu tố trong bài đang sai vì khi sử dụng thymeleaf thì sẽ quét các file.html chứ không quét hậu tố file.jsp

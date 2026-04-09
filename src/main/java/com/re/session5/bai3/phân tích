@@ -1,0 +1,26 @@
+1. Phân tích luồng dữ liệu (Data Flow)
+Luồng dữ liệu trong bài toán này tuân thủ mô hình MVC (Model-View-Controller) theo 4 bước chính:
+
+Bước 1: Yêu cầu từ View A (Trang danh sách)
+Hành động: Người dùng nhấn vào nút "Chỉnh sửa" tại file dish-list.html.
+
+Dữ liệu đi: Trình duyệt gửi một yêu cầu GET đến Server. URL chứa định danh của đối tượng  /bai3/edit/1
+
+Kỹ thuật: Sử dụng Link Expression @{link} để truyền ID động vào đường dẫn.
+
+Bước 2: Xử lý tại Controller
+Tiếp nhận: Controller sử dụng @GetMapping("/bai3/edit/{id}") và @PathVariable("id") để trích xuất con số 1 từ URL.
+
+Nghiệp vụ: Controller gọi AdminDishService để tìm kiếm đối tượng Dish tương ứng trong danh sách (hoặc Database).
+
+Bẫy lỗi: Nếu Service trả về null (không tìm thấy), Controller thực hiện điều hướng (redirect) quay lại View A kèm thông báo lỗi qua RedirectAttributes.
+
+Bước 3: Đẩy dữ liệu sang View B (Trang chỉnh sửa)
+Hành động: Nếu tìm thấy món ăn, Controller dùng model.addAttribute("dish", dishObject) để gắn đối tượng vào "chiếc xe tải" Model.
+
+Chuyển hướng: Controller trả về tên View là edit-dish.
+
+Bước 4: Hiển thị tại View B (Data Binding)
+Cơ chế: Thymeleaf nhận đối tượng từ Model và thực hiện đổ dữ liệu ngược (Populate) vào các ô nhập liệu.
+
+Kết quả: Trình duyệt hiển thị form đã có sẵn tên, giá và trạng thái cũ của món ăn để người dùng chỉnh sửa.
